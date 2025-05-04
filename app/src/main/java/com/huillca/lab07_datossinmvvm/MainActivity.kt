@@ -91,7 +91,7 @@ fun ScreenUser(modifier: Modifier = Modifier) {
             onClick = {
                 val user = User(0,firstName, lastName)
                 coroutineScope.launch {
-                    AgregarUsuario(user = user, dao = dao)
+                        EliminarUltimoUsuario(dao)
                 }
                 firstName = ""
                 lastName = ""
@@ -140,5 +140,14 @@ suspend fun AgregarUsuario(user: User, dao:UserDao): Unit {
         dao.insert(user)
     } catch (e: Exception) {
         Log.e("User", "Error: insert: ${e.message}")
+    }
+}
+
+@OptIn(UnstableApi::class)
+suspend fun EliminarUltimoUsuario(dao: UserDao) {
+    try {
+        dao.deleteLastUser()
+    } catch (e: Exception) {
+        Log.e("User", "Error: delete: ${e.message}")
     }
 }
